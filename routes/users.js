@@ -3,12 +3,12 @@ var router = express.Router();
 
 // Login Page - GET
 router.get('/login', function (req, res) {
-    res.send('LOGIN');
+    res.render('login');
 });
 
 // Register Page - POST
 router.get('/register', function (req, res) {
-    res.send('REGISTER');
+    res.render('register');
 });
 
 module.exports = router;

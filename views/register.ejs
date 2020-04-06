@@ -1,0 +1,24 @@
+<%- include('includes/header') %>
+
+<div class="container">
+    <form class="form-signin">
+        <h1 class="h3 mb-3 font-weight-normal text-center">Oro User Registration</h1>
+        <label class="sr-only">Full Names</label>
+        <input type="text" name="fullname" class="form-control" placeholder="Full Names" required autofocus>
+        <br>
+        <label class="sr-only">Email Address</label>
+        <input type="email" name="email" class="form-control" placeholder="Email Address" required autofocus>
+        <br>
+        <label class="sr-only">Username</label>
+        <input type="text" name="username" class="form-control" placeholder="Username" required autofocus>
+        <br>
+        <label class="sr-only">Password</label>
+        <input type="password" name="password" class="form-control" placeholder="Password" required>
+        <label class="sr-only">Confirm Password</label>
+        <input type="password" name="password2" class="form-control" placeholder="Confirm Password" required>
+        <p>Have Account? <a href="/users/login">Login</a></p>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign Up</button>
+    </form>
+</div>
+
+<%- include('includes/footer') %>
