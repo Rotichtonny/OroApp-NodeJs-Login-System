@@ -6,7 +6,6 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local');
 var bodyParser = require('body-parser');
 var flash = require('connect-flash');
-
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
@@ -36,6 +35,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 //Express Validator Middleware
+app.use(expressValidator());
 app.post(expressValidator({
     errorFormatter: function (param, msg, value) {
         var namespace = param.split('.')

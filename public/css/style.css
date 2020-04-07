@@ -2,6 +2,11 @@ html, body {
     height: 100%;
 }
 
+.reg-page, .log-in{
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+
 body {
     background-color: #eee !important;
 }

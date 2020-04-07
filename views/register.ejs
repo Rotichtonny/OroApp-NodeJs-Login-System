@@ -1,21 +1,31 @@
 <%- include('includes/header') %>
 
-<div class="container">
-    <form class="form-signin">
+<div class="container reg-page">
+    <% if(locals.error) { %>
+    <% error.forEach(function(error){ %>
+    <div class="alert alert-danger"><%= error.msg %></div>
+    <% }) %>
+    <% } %>
+    <form method="post" action="/users/register" class="form-signin">
         <h1 class="h3 mb-3 font-weight-normal text-center">Oro User Registration</h1>
         <label class="sr-only">Full Names</label>
-        <input type="text" name="fullname" class="form-control" placeholder="Full Names" required autofocus>
+        <input type="text" name="fullname" class="form-control" placeholder="Full Names"
+            value="<%= (!!locals.fullname)?fullname:'' %>" required autofocus>
         <br>
         <label class="sr-only">Email Address</label>
-        <input type="email" name="email" class="form-control" placeholder="Email Address" required autofocus>
+        <input type="email" name="email" class="form-control" placeholder="Email Address"
+            value="<%= (!!locals.email)?email:'' %>" required autofocus>
         <br>
         <label class="sr-only">Username</label>
-        <input type="text" name="username" class="form-control" placeholder="Username" required autofocus>
+        <input type="text" name="username" class="form-control" placeholder="Username"
+            value="<%= (!!locals.username)?username:'' %>" required autofocus>
         <br>
         <label class="sr-only">Password</label>
-        <input type="password" name="password" class="form-control" placeholder="Password" required>
+        <input type="password" name="password" class="form-control" placeholder="Password"
+            value="<%= (!!locals.password)?password:'' %>" required>
         <label class="sr-only">Confirm Password</label>
-        <input type="password" name="password2" class="form-control" placeholder="Confirm Password" required>
+        <input type="password" name="password2" class="form-control" placeholder="Confirm Password"
+            value="<%= (!!locals.password2)?password2:'' %>" required>
         <p>Have Account? <a href="/users/login">Login</a></p>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign Up</button>
     </form>
