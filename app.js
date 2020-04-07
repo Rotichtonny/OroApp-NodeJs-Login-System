@@ -60,6 +60,11 @@ app.use(function (req, res, next) {
     next();
 });
 
+app.get('*', function (req, res, next) {
+    res.locals.user = req.user || null;
+    next();
+});
+
 //Define Routes
 app.use('/', routes);
 app.use('/users', users);
