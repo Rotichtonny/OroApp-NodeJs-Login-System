@@ -5,6 +5,7 @@ var db = mongojs('oroapp', ['users']);
 var bycript = require('bcryptjs');
 var passport = require('passport');
 var localStrategy = require('passport-local').Strategy;
+var { check, validationResult } = require('express-validator');
 
 // Login Page - GET
 router.get('/login', function (req, res) {
@@ -17,7 +18,19 @@ router.get('/register', function (req, res) {
 });
 
 // Register Page - POST
-router.post('/register', function (req, res) {
+router.post('/register', [
+    check('fullname', 'Full Names is required').notEmpty(),
+    check('email', 'Email field is required').notEmpty(),
+    check('email', 'Please use a valid email address').isEmail(),
+    check('username', 'Username is required').notEmpty(),
+    check('password', 'Password is required').notEmpty(),
+    check('password2', 'Password do not match').custom(function(value, { req }) {
+        if (value !== req.body.password) {
+            throw new Error('Password do not match');
+        }
+        return true;
+    })
+], function (req, res) {
     //Get Form Values
     var fullname = req.body.fullname;
     var email = req.body.email;
@@ -25,16 +38,15 @@ router.post('/register', function (req, res) {
     var password = req.body.password;
     var password2 = req.body.password2;
 
-    //Validation
-    req.checkBody('fullname', 'Full Names is required').notEmpty();
-    req.checkBody('email', 'Email field is required').notEmpty();
-    req.checkBody('email', 'Please use a valid email address').isEmail();
-    req.checkBody('username', 'Username is required').notEmpty();
-    req.checkBody('password', 'Password is required').notEmpty();
-    req.checkBody('password2', 'Password do not match').equals(req.body.password);
-
-    //Check for errors
-    var error = req.validationErrors();
+    //Check for errors - using express-validator 6.x API (compatible with both old and new)
+    var error = validationResult(req).array();
+    // Fallback for old API if needed (if req.validationErrors exists)
+    if (!error.length && typeof req.validationErrors === 'function') {
+        var legacy = req.validationErrors();
+        if (legacy) error = legacy;
+    }
+    // Normalize to null if no errors (original code expects truthy check)
+    if (error.length === 0) error = null;
 
     if (error) {
         console.log('Form has errors...');
@@ -122,10 +134,12 @@ router.post('/login',
     }
 );
 
-router.get('/logout', function (req, res) {
-    req.logout();
-    req.flash('success', 'You have logged out')
-    res.redirect('/users/login');
+router.get('/logout', function (req, res, next) {
+    req.logout(function(err) {
+        if (err) { return next(err); }
+        req.flash('success', 'You have logged out')
+        res.redirect('/users/login');
+    });
 })
 
 module.exports = router;
